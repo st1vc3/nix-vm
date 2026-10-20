@@ -7,8 +7,14 @@
   time.timeZone = "Europe/Vienna";
   console.keyMap = "de";
 
-  programs.hyprland.enable = true;
+  # The Hyprland package ships a "Hyprland (uwsm-managed)" session too,
+  # which only works with uwsm enabled.
+  programs.hyprland = {
+    enable = true;
+    withUWSM = true;
+  };
 
+  services.displayManager.defaultSession = "hyprland-uwsm";
   services.displayManager.sddm = {
     enable = true;
     wayland.enable = true;
