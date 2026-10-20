@@ -18,16 +18,15 @@ Hyprland, SDDM, Neovim, fastfetch. Disk layout is declared with
 
 ```bash
 sudo -i
-nix-shell -p gh git
-gh auth login                      # GitHub.com, HTTPS, login with a web browser
-gh repo clone st1vc3/nix-vm && cd nix-vm
-
 HOST=dev-arm                       # or dev-x86
 nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- \
-  --mode destroy,format,mount --flake .#$HOST
-nixos-install --flake .#$HOST --no-root-passwd
-reboot                             # remove the ISO first
+  --mode destroy,format,mount --flake github:st1vc3/nix-vm#$HOST
+nixos-install --flake github:st1vc3/nix-vm#$HOST --no-root-passwd
+poweroff                           # remove the ISO, then boot
 ```
+
+   To change something before installing, `git clone https://github.com/st1vc3/nix-vm`
+   (via `nix-shell -p git`) and use `.#$HOST` instead.
 
 4. Log in as `stiven` / `changeme` in SDDM (session: Hyprland), open a terminal with
    Super+Q and run `passwd`.
@@ -35,7 +34,7 @@ reboot                             # remove the ISO first
 ## Update
 
 ```bash
-gh repo clone st1vc3/nix-vm ~/nix-vm && cd ~/nix-vm
+git clone https://github.com/st1vc3/nix-vm ~/nix-vm && cd ~/nix-vm
 sudo nixos-rebuild switch --flake .#dev-arm
 nix flake update                   # bump nixpkgs, then rebuild again
 ```
